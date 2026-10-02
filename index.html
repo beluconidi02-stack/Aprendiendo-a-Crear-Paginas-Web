@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap Wellbeing RRHH Sostenibilidad</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #141b2b;
+      --accent: #00e0c7;
+      --accent2: #7b61ff;
+      --danger: #ff4d6d;
+      --warning: #ffc93c;
+      --text: #f2f6ff;
+      --muted: #8a96b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    .stars {
+      position: fixed; inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 25%, rgba(0,224,199,.12) 0, transparent 40%),
+        radial-gradient(circle at 85% 65%, rgba(123,97,255,.12) 0, transparent 40%);
+      pointer-events: none; z-index: 0;
+    }
+    .wrap { position: relative; z-index: 1; max-width: 1600px; margin: 0 auto; padding: 40px 30px 140px; }
+    header.hero {
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 40px 20px; position: relative;
+    }
+    .hero-content h1 {
+      font-size: clamp(2.6rem, 8vw, 5.6rem); font-weight: 900; line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    .hero-content h1 span { display: block; color: var(--accent); margin-top: 8px; }
+    .hero-content p {
+      margin-top: 22px; color: var(--muted); font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+      max-width: 860px; margin-inline: auto; line-height: 1.55;
+    }
+    .scroll-hint {
+      position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--muted); font-size: .85rem; letter-spacing: .04em; cursor: pointer;
+      animation: bounce 2s infinite; opacity: .75; transition: opacity .2s;
+    }
+    .scroll-hint:hover { opacity: 1; }
+    .scroll-hint svg { width: 22px; height: 22px; }
+    .hero-meta {
+      position: absolute; top: 28px; left: 50%; transform: translateX(-50%);
+      font-size: .78rem; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid rgba(255,255,255,.1);
+      padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.04);
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+      40% { transform: translateX(-50%) translateY(10px); }
+      60% { transform: translateX(-50%) translateY(5px); }
+    }
+    @media (max-width: 900px) {
+      header.hero { min-height: 100svh; }
+      .hero-content h1 span { display: inline; margin-left: 10px; margin-top: 0; }
+    }
+
+    .road {
+      position: relative;
+      margin-top: 30px;
+      padding: 20px 0 20px 50px;
+    }
+    .road::before {
+      content: ''; position: absolute; left: 18px; top: 0; bottom: 0; width: 6px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2), var(--danger), var(--warning), var(--accent));
+      transform: translateX(-50%); border-radius: 6px;
+      box-shadow: 0 0 20px rgba(0,224,199,.2);
+    }
+
+    /* Puntero interactivo sobre la línea */
+    .road-pointer {
+      position: absolute;
+      left: 18px;
+      width: 36px;
+      height: 36px;
+      background: var(--bg);
+      border: 6px solid var(--accent);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 32px var(--accent), 0 0 70px rgba(0,224,199,.45);
+      z-index: 10;
+      transition: top 0.15s ease-out;
+      pointer-events: none;
+    }
+    .road-pointer::after {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border: 2px solid rgba(0,224,199,.35);
+      border-radius: 50%;
+      animation: pulseRing 1.8s infinite;
+    }
+    @keyframes pulseRing {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.7); opacity: 0; }
+    }
+
+    .phase {
+      position: relative;
+      width: 100%;
+      padding: 42px 0 42px 56px;
+      text-align: left;
+      opacity: 0; transform: translateY(40px);
+      animation: rise .8s ease-out forwards;
+    }
+    .phase:nth-child(1) { animation-delay: .1s; }
+    .phase:nth-child(2) { animation-delay: .3s; }
+    .phase:nth-child(3) { animation-delay: .5s; }
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+    .dot {
+      position: absolute; top: 60px; left: 4px; width: 32px; height: 32px; border-radius: 50%;
+      background: var(--bg); border: 6px solid var(--accent); box-shadow: 0 0 24px var(--accent);
+      z-index: 5;
+    }
+    .phase.stop .dot { border-color: var(--danger); box-shadow: 0 0 24px var(--danger); }
+    .phase.goal .dot { border-color: var(--warning); box-shadow: 0 0 24px var(--warning); }
+
+    .card {
+      background: var(--card); border-radius: 32px; padding: 48px;
+      border: 1px solid rgba(255,255,255,.08); box-shadow: 0 24px 60px rgba(0,0,0,.35);
+      transition: transform .25s ease, box-shadow .25s ease;
+      width: 100%;
+      max-width: none;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 30px 70px rgba(0,0,0,.45); }
+    .badge {
+      display: inline-block; font-size: .85rem; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; padding: 8px 16px; border-radius: 999px; margin-bottom: 14px;
+    }
+    .phase.now .badge { background: rgba(0,224,199,.14); color: var(--accent); }
+    .phase.stop .badge { background: rgba(255,77,109,.14); color: var(--danger); }
+    .phase.goal .badge { background: rgba(255,201,60,.14); color: var(--warning); }
+
+    .card h2 { font-size: clamp(1.9rem, 3vw, 2.6rem); margin-bottom: 16px; }
+    .card p { color: var(--muted); line-height: 1.65; margin-bottom: 28px; font-size: clamp(1.05rem, 1.5vw, 1.25rem); max-width: 900px; }
+
+    .kpi-row { display: flex; gap: 18px; flex-wrap: wrap; }
+    .kpi {
+      flex: 1; min-width: 150px;
+      background: rgba(255,255,255,.05); border-radius: 18px; padding: 22px 24px;
+      text-align: center; border: 1px solid rgba(255,255,255,.06);
+    }
+    .kpi b { display: block; font-size: 1.7rem; color: var(--text); }
+    .kpi span { font-size: .9rem; color: var(--muted); }
+
+    .stop-box {
+      background: rgba(255,77,109,.08); border: 1px solid rgba(255,77,109,.25); border-radius: 22px;
+      padding: 30px; margin-top: 22px;
+    }
+    .stop-box .big { font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 900; color: var(--danger); }
+    .stop-box small { color: var(--muted); font-size: 1.1rem; display: block; margin-top: 6px; }
+
+    /* SIMULADOR */
+    .sim-frame { margin-top: 28px; border-radius: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); background: #0f1420; }
+    .sim-frame.now-frame { margin-top: 24px; }
+    .sim-hero.now-hero { background: linear-gradient(135deg, rgba(0,224,199,.16), rgba(123,97,255,.16)); }
+    .sim-top {
+      display: flex; align-items: center; gap: 10px; padding: 14px 20px;
+      background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .dot-r { width: 10px; height: 10px; border-radius: 50%; background: var(--danger); }
+    .dot-y { width: 10px; height: 10px; border-radius: 50%; background: var(--warning); }
+    .dot-g { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+    .sim-top span { font-size: .85rem; color: var(--muted); margin-left: auto; }
+    .sim-body { padding: 28px; }
+    .sim-hero {
+      background: linear-gradient(135deg, rgba(0,224,199,.18), rgba(123,97,255,.18));
+      border-radius: 20px; padding: 30px; margin-bottom: 24px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    }
+    .sim-hero h3 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); }
+    .sim-hero p { color: var(--muted); margin-top: 6px; font-size: 1.05rem; }
+    .ai-btn {
+      margin-left: auto; background: var(--accent2); color: #fff; border: 0; border-radius: 999px;
+      padding: 16px 26px; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 30px rgba(123,97,255,.3);
+      transition: transform .2s ease;
+    }
+    .ai-btn:hover { transform: scale(1.04); }
+
+    .sim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .sim-card {
+      background: rgba(255,255,255,.04); border-radius: 16px; padding: 20px;
+      border: 1px solid rgba(255,255,255,.06); cursor: pointer; transition: .2s;
+    }
+    .sim-card:hover { background: rgba(255,255,255,.08); transform: translateY(-3px); }
+    .sim-card h4 { font-size: 1.05rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .sim-card p { font-size: .9rem; color: var(--muted); margin: 0; }
+
+    .metrics {
+      margin-top: 24px; background: rgba(0,224,199,.06); border: 1px solid rgba(0,224,199,.18);
+      border-radius: 18px; padding: 22px;
+    }
+    .metrics h4 { color: var(--accent); margin-bottom: 14px; font-size: 1.15rem; }
+    .metric-row { display: flex; gap: 14px; flex-wrap: wrap; }
+    .metric { flex: 1; min-width: 130px; background: rgba(0,0,0,.2); border-radius: 12px; padding: 16px; text-align: center; }
+    .metric b { font-size: 1.4rem; display: block; }
+    .metric span { font-size: .78rem; color: var(--muted); }
+
+    /* POPUP IA */
+    .ai-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center; z-index: 100;
+    }
+    .ai-overlay.active { display: flex; }
+    .ai-popup {
+      background: var(--card); border-radius: 24px; width: min(420px, 92vw); padding: 24px;
+      border: 1px solid rgba(0,224,199,.25); box-shadow: 0 30px 80px rgba(0,0,0,.5);
+      animation: pop .35s ease;
+    }
+    @keyframes pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .ai-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .ai-avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2)); display: grid; place-items: center; font-size: 1.4rem;
+    }
+    .ai-head div b { display: block; }
+    .ai-head div span { font-size: .8rem; color: var(--muted); }
+    .ai-msg {
+      background: rgba(255,255,255,.06); border-radius: 16px; padding: 16px; line-height: 1.5; margin-bottom: 16px;
+    }
+    .ai-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .ai-actions button {
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: var(--text);
+      border-radius: 999px; padding: 10px 16px; cursor: pointer; font-weight: 500; transition: .2s;
+    }
+    .ai-actions button:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+    .ai-response { margin-top: 14px; min-height: 0; color: var(--accent); font-size: .95rem; }
+    .ai-cta {
+      display: inline-block; background: var(--accent); color: #000; font-weight: 700;
+      padding: 12px 20px; border-radius: 999px; text-decoration: none; transition: transform .2s ease;
+    }
+    .ai-cta:hover { transform: scale(1.04); }
+
+    /* POPUP MURO */
+    .muro-popup { border-color: rgba(123,97,255,.25); }
+
+    /* POPUP MINI AMIGO */
+    .amigo-popup { border-color: rgba(0,224,199,.25); }
+
+    /* DASHBOARD */
+    .dash-popup {
+      width: min(760px, 92vw); max-width: none;
+      background: linear-gradient(180deg, #101729 0%, #0b101c 100%);
+      border: 1px solid rgba(0,224,199,.18); padding: 34px;
+    }
+    .dash-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+    .dash-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+    .dash-avatar {
+      width: 54px; height: 54px; border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: grid; place-items: center; font-weight: 900; font-size: 1.2rem; color: #000;
+    }
+    .dash-header b { display: block; font-size: 1.3rem; color: var(--text); }
+    .dash-status { color: var(--accent); font-size: .82rem; font-weight: 600; }
+    .dash-subtitle { color: var(--muted); font-size: .95rem; margin-bottom: 24px; }
+    .dash-card.full { grid-column: 1 / -1; }
+    .dash-label { color: var(--muted); font-size: .85rem; margin-bottom: 6px; }
+    .dash-number { font-size: 2.2rem; font-weight: 900; color: var(--text); margin-bottom: 10px; }
+    .dash-bar {
+      height: 8px; background: rgba(255,255,255,.08); border-radius: 999px; overflow: hidden;
+    }
+    .dash-fill {
+      height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 999px; transition: width .6s ease;
+    }
+    .dash-fill.accent { background: linear-gradient(90deg, var(--warning), var(--accent)); }
+    .dash-comparison {
+      margin: 22px 0; background: rgba(0,0,0,.18); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px; padding: 18px;
+    }
+    .dash-comp-title { color: var(--text); font-weight: 700; margin-bottom: 12px; }
+    .dash-comp-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .dash-comp-row span { width: 80px; font-size: .85rem; color: var(--muted); }
+    .dash-comp-row b { width: 24px; text-align: right; color: var(--text); }
+    .dash-comp-track { flex: 1; height: 10px; background: rgba(255,255,255,.08); border-radius: 999px; overflow: hidden; }
+    .dash-comp-fill { height: 100%; border-radius: 999px; transition: width .6s ease; }
+    .dash-comp-fill.out { background: var(--accent); }
+    .dash-comp-fill.in { background: var(--warning); }
+    .dash-export {
+      width: 100%; background: var(--accent2); color: #fff; border: 0; border-radius: 999px;
+      padding: 14px; font-weight: 700; cursor: pointer; margin-bottom: 12px; transition: .2s;
+    }
+    .dash-export:hover { background: #6345e6; }
+    .amigo-btn { background: var(--accent); color: #000; }
+    .amigo-btn:hover { background: #00c9b2; }
+    .amigo-response {
+      margin-top: 14px; padding: 16px; border-radius: 16px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      color: var(--text); font-size: .95rem; line-height: 1.55; display: none;
+    }
+    .amigo-response.visible { display: block; animation: popIn .35s ease; }
+    .amigo-msg { text-align: center; padding: 12px 10px; font-size: 1rem; }
+    .amigo-textarea { min-height: 120px; margin-bottom: 14px; }
+    .muro-textarea {
+      width: 100%; min-height: 120px; resize: vertical;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px; padding: 16px; color: var(--text); font-family: inherit; font-size: .95rem;
+      outline: none; margin-bottom: 14px;
+    }
+    .muro-textarea::placeholder { color: var(--muted); }
+    .muro-textarea:focus { border-color: var(--accent2); }
+    .muro-post-btn {
+      width: 100%; background: var(--accent2); color: #fff; border: 0; border-radius: 999px;
+      padding: 14px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-bottom: 10px;
+      box-shadow: 0 10px 30px rgba(123,97,255,.25); transition: transform .2s ease;
+    }
+    .muro-post-btn:hover { transform: scale(1.02); }
+    .muro-feedback {
+      min-height: 22px; margin-bottom: 10px; font-size: .92rem; color: var(--accent);
+      opacity: 0; transition: opacity .25s ease;
+    }
+    .muro-feedback.visible { opacity: 1; }
+
+    /* MURO FEED */
+    .muro-feed {
+      margin-top: 26px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px; padding: 22px;
+    }
+    .muro-feed h4 { font-size: 1.1rem; margin-bottom: 16px; color: var(--text); }
+    .muro-posts { display: flex; flex-direction: column; gap: 14px; }
+    .muro-post {
+      background: rgba(0,0,0,.2); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 18px;
+      animation: popIn .35s ease;
+    }
+    @keyframes popIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .muro-post-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .muro-avatar {
+      width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: grid; place-items: center; font-weight: 700; font-size: .85rem; color: #000;
+    }
+    .muro-post-head b { display: block; font-size: .95rem; }
+    .muro-post-head span { font-size: .75rem; color: var(--muted); }
+    .muro-post > p { color: var(--text); line-height: 1.5; font-size: .95rem; margin-bottom: 12px; }
+    .muro-like, .muro-clap {
+      background: transparent; border: 1px solid rgba(255,255,255,.12); color: var(--muted);
+      border-radius: 999px; padding: 8px 14px; font-size: .85rem; cursor: pointer; transition: .2s;
+    }
+    .muro-like:hover, .muro-like.liked { background: rgba(255,77,109,.15); border-color: var(--danger); color: var(--danger); }
+    .muro-clap:hover, .muro-clap.clapped { background: rgba(255,201,60,.15); border-color: var(--warning); color: var(--warning); }
+    .muro-like .like-count, .muro-clap .clap-count { margin-left: 4px; }
+
+    /* RECONOCIMIENTO */
+    .reco-popup { border-color: rgba(255,201,60,.25); }
+    .reco-label { display: block; margin: 10px 0 6px; font-size: .88rem; color: var(--muted); font-weight: 500; }
+    .reco-input {
+      width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; padding: 11px 14px; color: var(--text); font-family: inherit; font-size: .95rem; outline: none;
+    }
+    .reco-input::placeholder { color: var(--muted); }
+    .reco-input:focus { border-color: var(--warning); }
+    .reco-values { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .reco-values button {
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: var(--text);
+      border-radius: 999px; padding: 7px 13px; cursor: pointer; font-size: .82rem; transition: .2s;
+    }
+    .reco-values button:hover, .reco-values button.selected { background: var(--warning); color: #000; border-color: var(--warning); font-weight: 700; }
+    .reco-btn { background: linear-gradient(135deg, var(--warning), #ff9f43) !important; color: #000 !important; }
+    .reco-btn:hover { filter: brightness(1.08); transform: scale(1.02); }
+    .reco-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,201,60,.12); border: 1px solid rgba(255,201,60,.3);
+      color: var(--warning); border-radius: 999px; padding: 5px 11px; font-size: .75rem; font-weight: 700; margin-bottom: 10px;
+    }
+
+    .ai-close {
+      margin-top: 16px; width: 100%; background: transparent; border: 1px solid rgba(255,255,255,.15);
+      color: var(--muted); border-radius: 999px; padding: 10px; cursor: pointer;
+    }
+    .ai-close:hover { color: var(--text); border-color: var(--text); }
+
+    footer { text-align: center; padding: 70px 20px 0; color: var(--muted); font-size: .95rem; }
+
+    @media (max-width: 900px) {
+      .wrap { padding: 28px 14px 100px; }
+      .hero-meta { font-size: .65rem; top: 18px; padding: 5px 10px; }
+      .scroll-hint { font-size: .78rem; bottom: 22px; }
+      .road { padding-left: 40px; }
+      .road::before { left: 14px; width: 5px; }
+      .road-pointer { left: 14px; width: 24px; height: 24px; border-width: 4px; }
+      .phase { padding: 26px 0; padding-left: 40px; }
+      .dot { left: 1px !important; top: 42px; width: 26px; height: 26px; border-width: 4px; }
+      .card { padding: 22px; border-radius: 22px; }
+      .card h2 { font-size: 1.55rem; }
+      .card p { font-size: .98rem; }
+      .sim-hero { flex-direction: column; align-items: flex-start; padding: 22px; }
+      .sim-hero h3 { font-size: 1.45rem; }
+      .ai-btn { margin-left: 0; width: 100%; text-align: center; margin-top: 12px; }
+      .sim-grid { grid-template-columns: 1fr; }
+      .sim-card { padding: 18px; }
+      .sim-top span { font-size: .7rem; }
+      .metrics .metric-row { gap: 10px; }
+      .metric { padding: 12px; min-width: 100px; }
+      .metric b { font-size: 1.2rem; }
+      .muro-feed { padding: 18px; }
+    }
+    @media (max-width: 600px) {
+      .wrap { padding: 22px 12px 90px; }
+      .hero-content h1 { font-size: clamp(2rem, 11vw, 3rem); }
+      .hero-content h1 span { display: block; margin-left: 0; margin-top: 6px; }
+      .hero-content p { font-size: 1rem; }
+      .hero-meta { font-size: .6rem; letter-spacing: .04em; }
+      .road { padding-left: 34px; }
+      .phase { padding-left: 34px; }
+      .dot { left: 0px !important; }
+      .card { padding: 18px; }
+      .kpi-row { gap: 10px; }
+      .kpi { min-width: 100%; padding: 14px; }
+      .sim-grid { gap: 12px; }
+      .sim-card { padding: 16px; }
+      .sim-body { padding: 16px; }
+      .sim-frame { border-radius: 16px; }
+      .metrics { padding: 16px; }
+      .metric { min-width: 80px; padding: 10px; }
+      .metric b { font-size: 1.1rem; }
+      .metric span { font-size: .7rem; }
+      .ai-popup { width: min(94vw, 420px); padding: 20px; }
+      .dash-popup { width: min(96vw, 760px); padding: 22px; }
+      .dash-grid, .dash-row { grid-template-columns: 1fr !important; }
+      .dash-card { padding: 18px; }
+      .dash-number { font-size: 2rem; }
+      .dash-comparison { padding: 18px; }
+      .muro-textarea, .reco-input { font-size: .95rem; }
+      .onboard-card { padding: 28px 20px; width: min(92%, 360px); }
+      .onboard-card h3 { font-size: 1.3rem; }
+    }
+    /* ONBOARDING */
+    .sim-locked { min-height: 420px; display: flex; align-items: center; justify-content: center; }
+    .sim-locked .sim-top { display: none; }
+    .onboard-overlay {
+      position: static;
+      background: transparent; backdrop-filter: none;
+      display: flex; align-items: center; justify-content: center; z-index: 20;
+      width: 100%;
+      animation: fadeIn .5s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .onboard-overlay.hidden { display: none; }
+    .onboard-card {
+      background: var(--card); border: 1px solid rgba(0,224,199,.2);
+      border-radius: 26px; padding: 42px; text-align: center;
+      width: min(420px, 90%); box-shadow: 0 30px 80px rgba(0,0,0,.5);
+      animation: pop .45s ease;
+    }
+    .onboard-icon { font-size: 3rem; margin-bottom: 14px; }
+    .onboard-card h3 { font-size: 1.5rem; margin-bottom: 10px; }
+    .onboard-card p { color: var(--muted); margin-bottom: 22px; font-size: 1rem; }
+    .onboard-input {
+      width: 100%; padding: 16px 18px; border-radius: 14px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+      color: var(--text); font-family: inherit; font-size: 1rem; outline: none; margin-bottom: 16px;
+    }
+    .onboard-input:focus { border-color: var(--accent); }
+    .onboard-input::placeholder { color: var(--muted); }
+    .onboard-btn {
+      width: 100%; background: var(--accent); color: #000; border: 0; border-radius: 999px;
+      padding: 16px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform .2s;
+    }
+    .onboard-btn:hover { transform: scale(1.03); }
+    #simBody.fade-in { animation: fadeBody .5s ease; }
+    @keyframes fadeBody { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-meta">Creado por Companyians · IA CODE · Octubre 2026</div>
+      <div class="hero-content">
+        <h1>ROADMAP DRIVER <span>Bienestar en la Era de la IA</span></h1>
+        <p>De iniciativas donde la IA era una herramienta de diseño a un proyecto donde la IA sea el centro. Tres fases para transformar el bienestar de Company en una experiencia centralizada, autodeterminante, medible, ágil y escalable.</p>
+      </div>
+      <div class="scroll-hint" onclick="document.getElementById('road').scrollIntoView({behavior:'smooth'})">
+        <span>Desplazarse para explorar</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+      </div>
+    </header>
+
+    <div class="road" id="road">
+      <div class="road-pointer" id="roadPointer"></div>
+
+      <!-- FASE 1 -->
+      <div class="phase now">
+        <div class="card">
+          <div class="badge">Punto de partida</div>
+          <h2>Dónde estamos hoy</h2>
+          <p>Ya generamos valor con contenido de bienestar creado por IA y comunidades activas en Viva Engage.</p>
+
+          <div class="sim-frame now-frame">
+            <div class="sim-top"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><span>contenido actual generado</span></div>
+            <div class="sim-body">
+              <div class="sim-hero now-hero">
+                <div>
+                  <h3>Bienestar Company</h3>
+                  <p>Tres pilares activos: físico, mental y social.</p>
+                </div>
+              </div>
+
+              <div class="sim-grid">
+                <div class="sim-card">
+                  <h4>💪 Bienestar Físico</h4>
+                  <p>Infografías creadas con IA.</p>
+                </div>
+                <div class="sim-card">
+                  <h4>🧠 Bienestar Mental</h4>
+                  <p>Infografías creadas con IA.</p>
+                </div>
+                <div class="sim-card">
+                  <h4>🤝 Bienestar Social</h4>
+                  <p>5 comunidades de Viva Engage autogestionadas a través de automatizaciones.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 2 -->
+      <div class="phase stop">
+        <div class="card">
+          <div class="badge">El stopper</div>
+          <h2>El obstáculo crítico</h2>
+          <p>La dependencia del corporativo para habilitar espacios de Wellbeing nos quita autonomía y agilidad: 4 meses de espera impactan directamente en la relevancia de la propuesta.</p>
+          <div class="stop-box">
+            <div class="big">4 meses de espera</div>
+            <small>→ impacto directo en la autonomía, agilidad y relevancia regional del wellbeing</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 3 -->
+      <div class="phase goal">
+        <div class="card">
+          <div class="badge">EL OBJETIVO</div>
+          <h2>A dónde queremos llegar</h2>
+          <p>Un sitio web interactivo, centralizado y personalizado: el nuevo hub de cultura y bienestar de Company.</p>
+
+          <div class="sim-frame" id="simFrame">
+
+            <!-- ONBOARDING WELCOME -->
+            <div class="onboard-overlay" id="onboardOverlay">
+              <div class="onboard-card">
+                <div class="onboard-icon">🌿</div>
+                <h3>Bienvenido a tu espacio de Wellbeing Company</h3>
+                <p>¿Cuál es tu nombre?</p>
+                <input type="text" id="onboardName" class="onboard-input" placeholder="Ej. Belu Conidi" onkeydown="if(event.key==='Enter') enterHub()">
+                <button class="onboard-btn" onclick="enterHub()">Ingresar</button>
+              </div>
+            </div>
+
+            <div class="sim-body" id="simBody" style="display:none;">
+              <div class="sim-hero">
+                <div>
+                  <h3 id="welcomeName">Bienvenida, Sofía</h3>
+                  <p>Tu bienestar físico, mental y social en un solo lugar.</p>
+                </div>
+                <button class="ai-btn" onclick="openAI()">🤖 Probar Agente de IA</button>
+              </div>
+
+              <div class="sim-grid">
+                <div class="sim-card" onclick="openMuro()">
+                  <h4>💬 Muro de Posteos</h4>
+                  <p>Historias, logros y momentos wellbeing de los equipos.</p>
+                </div>
+                <div class="sim-card" onclick="openMiniAmigo()">
+                  <h4>🧘 Mini Amigo de Wellbeing</h4>
+                  <p>Tips para tu día a día laboral.</p>
+                </div>
+                <div class="sim-card" onclick="openReconocimiento()">
+                  <h4>⭐ Reconocimientos</h4>
+                  <p>Destacar a quienes contagian cultura.</p>
+                </div>
+                <div class="sim-card" onclick="openDashboard()">
+                  <h4>📊 Métricas de Impacto</h4>
+                  <p>Lo que se mide se puede mejorar.</p>
+                </div>
+              </div>
+
+              <div class="muro-feed" id="muroFeed">
+                <h4>💬 Muro de Posteos Recientes</h4>
+                <div class="muro-posts" id="muroPosts">
+                  <div class="muro-post">
+                    <div class="muro-post-head">
+                      <div class="muro-avatar">AL</div>
+                      <div>
+                        <b>Andrea López</b>
+                        <span>hace 2 horas</span>
+                      </div>
+                    </div>
+                    <p>Hoy terminé mi pausa activa de 10 minutos y ya siento la diferencia. ¡A seguir cuidándonos! 🧘‍♀️</p>
+                    <button class="muro-like" onclick="likePost(this)">❤️ Me gusta <span class="like-count">12</span></button>
+                  </div>
+                  <div class="muro-post">
+                    <div class="muro-post-head">
+                      <div class="muro-avatar">MR</div>
+                      <div>
+                        <b>Martín Ruiz</b>
+                        <span>hace 5 horas</span>
+                      </div>
+                    </div>
+                    <p>Reconozco al equipo de Operaciones por mantener el ritmo esta semana sin perder el bienestar. 💪</p>
+                    <button class="muro-like" onclick="likePost(this)">❤️ Me gusta <span class="like-count">8</span></button>
+                  </div>
+                </div>
+              </div>
+
+              
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <footer></footer>
+  </div>
+
+  <!-- POPUP RECONOCIMIENTO -->
+  <div class="ai-overlay" id="recoOverlay" onclick="closeReconocimiento(event)">
+    <div class="ai-popup reco-popup" onclick="event.stopPropagation()">
+      <div class="ai-head">
+        <div class="ai-avatar">⭐</div>
+        <div>
+          <b>Dar un reconocimiento</b>
+          <span>Destaca a quien contagia cultura</span>
+        </div>
+      </div>
+      <label class="reco-label">¿A quién querés reconocer hoy?</label>
+      <input type="text" id="recoTo" class="reco-input" placeholder="Ej: María González">
+      <label class="reco-label">¿Qué valor querés reconocer?</label>
+      <div class="reco-values" id="recoValues">
+        <button type="button" data-value="#BeAgile" onclick="selectValue(this)">#BeAgile</button>
+        <button type="button" data-value="#BeKind" onclick="selectValue(this)">#BeKind</button>
+        <button type="button" data-value="#BeCollaborative" onclick="selectValue(this)">#BeCollaborative</button>
+        <button type="button" data-value="#BeTrustworthy" onclick="selectValue(this)">#BeTrustworthy</button>
+      </div>
+      <label class="reco-label">¿Qué mensaje le dejarías a esa persona?</label>
+      <textarea id="recoMsg" class="muro-textarea" placeholder="Escribe tu mensaje de reconocimiento..."></textarea>
+      <div class="muro-feedback" id="recoFeedback"></div>
+      <button class="muro-post-btn reco-btn" onclick="sendReconocimiento()">🌟 Enviar Reconocimiento</button>
+      <button class="ai-close" onclick="closeReconocimiento()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- POPUP MINI AMIGO DE WELLBEING -->
+  <div class="ai-overlay" id="amigoOverlay" onclick="closeMiniAmigo(event)">
+    <div class="ai-popup amigo-popup" onclick="event.stopPropagation()">
+      <div class="ai-head">
+        <div class="ai-avatar">🧘</div>
+        <div>
+          <b>Mini Amigo de Wellbeing</b>
+          <span>Tips para tu día a día laboral</span>
+        </div>
+      </div>
+      <div class="ai-msg amigo-msg">¿Cómo te sentís hoy?</div>
+      <textarea id="amigoInput" class="muro-textarea amigo-textarea" placeholder="Ej: Tengo una reunión difícil, estoy estresado, necesito concentrarme..." onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); sendAmigo();}"></textarea>
+      <button class="muro-post-btn amigo-btn" onclick="sendAmigo()">💬 Enviar</button>
+      <div class="muro-feedback" id="amigoFeedback"></div>
+      <div class="amigo-response" id="amigoResponse"></div>
+      <button class="ai-close" onclick="closeMiniAmigo()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- POPUP DASHBOARD -->
+  <div class="ai-overlay" id="dashOverlay" onclick="closeDashboard(event)">
+    <div class="ai-popup dash-popup" onclick="event.stopPropagation()">
+      <div class="dash-header">
+        <div class="dash-avatar" id="dashAvatar">SC</div>
+        <div>
+          <b id="dashUserName">Invitado</b>
+          <span class="dash-status">● Sesión Activa - Company Regional</span>
+        </div>
+      </div>
+      <div class="dash-subtitle">Impacto de tu sesión en el hub de bienestar</div>
+
+      <div class="dash-row">
+        <div class="dash-card">
+          <div class="dash-label">Posteos propios</div>
+          <div class="dash-number" id="m-posts">0</div>
+          <div class="dash-bar"><div class="dash-fill" id="bar-posts" style="width:0%"></div></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">Consultas al Mini Amigo</div>
+          <div class="dash-number" id="m-amigo">0</div>
+          <div class="dash-bar"><div class="dash-fill" id="bar-amigo" style="width:0%"></div></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">Reacciones dadas</div>
+          <div class="dash-number" id="m-reactions">0</div>
+          <div class="dash-bar"><div class="dash-fill" id="bar-reactions" style="width:0%"></div></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">Acciones de bienestar agendadas</div>
+          <div class="dash-number" id="m-actions">0</div>
+          <div class="dash-bar"><div class="dash-fill accent" id="bar-actions" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="dash-comparison">
+        <div class="dash-comp-title">Otorgados vs. Recibidos</div>
+        <div class="dash-comp-bars">
+          <div class="dash-comp-row">
+            <span>Otorgados</span>
+            <div class="dash-comp-track"><div class="dash-comp-fill out" id="comp-out" style="width:0%"></div></div>
+            <b id="m-reco-out-2">0</b>
+          </div>
+          <div class="dash-comp-row">
+            <span>Recibidos</span>
+            <div class="dash-comp-track"><div class="dash-comp-fill in" id="comp-in" style="width:0%"></div></div>
+            <b id="m-reco-in-2">0</b>
+          </div>
+        </div>
+      </div>
+
+      <button class="dash-export" onclick="exportResumen()">📥 Descargar resumen de actividad (.csv)</button>
+      <button class="ai-close" onclick="closeDashboard()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- POPUP MURO DE POSTEOS -->
+  <div class="ai-overlay" id="muroOverlay" onclick="closeMuro(event)">
+    <div class="ai-popup muro-popup" onclick="event.stopPropagation()">
+      <div class="ai-head">
+        <div class="ai-avatar">💬</div>
+        <div>
+          <b>Muro de Posteos</b>
+          <span>Comparte tu momento wellbeing</span>
+        </div>
+      </div>
+      <div class="ai-msg">¿Qué te gustaría compartir hoy?</div>
+      <textarea id="muroText" class="muro-textarea" placeholder="Escribe aquí tu historia, logro o momento wellbeing..."></textarea>
+      <div class="muro-feedback" id="muroFeedback"></div>
+      <button class="muro-post-btn" onclick="postMuro()">🚀 Postear</button>
+      <button class="ai-close" onclick="closeMuro()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- POPUP AGENTE IA -->
+  <div class="ai-overlay" id="aiOverlay" onclick="closeAI(event)">
+    <div class="ai-popup" onclick="event.stopPropagation()">
+      <div class="ai-head">
+        <div class="ai-avatar">🤖</div>
+        <div>
+          <b>Agente de Bienestar</b>
+          <span>IA interna · Company</span>
+        </div>
+      </div>
+      <div class="ai-msg">¡Hola! ¿Cómo te puedo ayudar hoy con tu bienestar?</div>
+      <div class="ai-actions">
+        <button onclick="replyPausa()">⏱️ Pausa activa de 5 min</button>
+        <button onclick="replyAlmuerzo()">🥗 Recordar almuerzo</button>
+        <button onclick="replyAgua()">💧 Recordar hidratación</button>
+        <button onclick="openRecoFromAI()">⭐ Reconocer a alguien</button>
+      </div>
+      <div class="ai-response" id="aiResponse"></div>
+      <button class="ai-close" onclick="closeAI()">Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    function openAI() {
+      track('actions');
+      document.getElementById('aiOverlay').classList.add('active');
+      document.getElementById('aiResponse').textContent = '';
+    }
+    function closeAI(e) {
+      if (!e || e.target.id === 'aiOverlay' || e.target.classList.contains('ai-close')) {
+        document.getElementById('aiOverlay').classList.remove('active');
+      }
+    }
+    function reply(type) {
+      const res = document.getElementById('aiResponse');
+      res.innerHTML = msgs[type] || '';
+    }
+    function replyAgua() {
+      track('actions');
+      const res = document.getElementById('aiResponse');
+      res.innerHTML = `
+        <p style="margin-bottom:14px;">¡Excelente iniciativa! Programá un aviso recurrente en tu calendario para mantenerte hidratada durante la jornada.</p>
+        <a class="ai-cta" href="https://outlook.office.com/calendar/action/compose?subject=Pausa%20para%20Hidratar%20💧&body=Tomate%20un%20momento%20para%20cuidar%20tu%20bienestar." target="_blank" rel="noopener noreferrer">💧 Agendar en Microsoft Calendar</a>
+      `;
+    }
+    function replyAlmuerzo() {
+      track('actions');
+      const res = document.getElementById('aiResponse');
+      res.innerHTML = `
+        <p style="margin-bottom:14px;">¡Muy importante! Bloqueá tu agenda para asegurar un corte saludable y desconectar.</p>
+        <a class="ai-cta" href="https://outlook.office.com/calendar/action/compose?subject=Almuerzo%20Saludable%20🥗&body=Tiempo%20protegido%20para%20desconectar%20y%20almorzar." target="_blank" rel="noopener noreferrer">🥗 Agendar Almuerzo en Calendar</a>
+      `;
+    }
+    function replyPausa() {
+      track('actions');
+      const res = document.getElementById('aiResponse');
+      res.innerHTML = `
+        <p style="margin-bottom:14px;">¡Excelente decisión! Accedé a SportClub Online con tu mail de Company, hacé clic en la lupita, buscá 'pausas activas' y disfrutá de unos minutos dedicados a tu bienestar.</p>
+        <a class="ai-cta" href="https://app.online.sportclub.com.ar" target="_blank" rel="noopener noreferrer">🏃 Abrir Pausas Activas (SportClub)</a>
+      `;
+    }
+    function openDashboard() {
+      document.getElementById('m-posts').textContent = sessionMetrics.posts;
+      document.getElementById('m-reco-out-2').textContent = sessionMetrics.recoOut;
+      document.getElementById('m-reco-in-2').textContent = sessionMetrics.recoIn;
+      document.getElementById('m-amigo').textContent = sessionMetrics.amigo;
+      document.getElementById('m-actions').textContent = sessionMetrics.actions;
+      document.getElementById('m-reactions').textContent = sessionMetrics.reactions;
+      document.getElementById('dashUserName').textContent = currentUser.name;
+      document.getElementById('dashAvatar').textContent = currentUser.initials;
+
+      const max = Math.max(sessionMetrics.posts, sessionMetrics.recoOut, sessionMetrics.recoIn, sessionMetrics.amigo, sessionMetrics.actions, sessionMetrics.reactions, 1);
+      document.getElementById('bar-posts').style.width = `${(sessionMetrics.posts / max) * 100}%`;
+      document.getElementById('bar-amigo').style.width = `${(sessionMetrics.amigo / max) * 100}%`;
+      document.getElementById('bar-actions').style.width = `${(sessionMetrics.actions / max) * 100}%`;
+      document.getElementById('bar-reactions').style.width = `${(sessionMetrics.reactions / max) * 100}%`;
+
+      const totalReco = Math.max(sessionMetrics.recoOut + sessionMetrics.recoIn, 1);
+      document.getElementById('comp-out').style.width = `${(sessionMetrics.recoOut / totalReco) * 100}%`;
+      document.getElementById('comp-in').style.width = `${(sessionMetrics.recoIn / totalReco) * 100}%`;
+
+      document.getElementById('dashOverlay').classList.add('active');
+    }
+    function closeDashboard(e) {
+      if (!e || e.target.id === 'dashOverlay' || e.target.classList.contains('ai-close')) {
+        document.getElementById('dashOverlay').classList.remove('active');
+      }
+    }
+    function exportResumen() {
+      const data = [
+        ['Métrica', 'Valor'],
+        ['Usuario', currentUser.name],
+        ['Posteos propios', sessionMetrics.posts],
+        ['Reconocimientos otorgados', sessionMetrics.recoOut],
+        ['Reconocimientos recibidos', sessionMetrics.recoIn],
+        ['Consultas al Mini Amigo', sessionMetrics.amigo],
+        ['Acciones de bienestar agendadas', sessionMetrics.actions],
+        ['Reacciones dadas', sessionMetrics.reactions]
+      ];
+      const csv = data.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'resumen-impacto-wellbeing-softtek.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    function openRecoFromAI() {
+      closeAI();
+      setTimeout(() => {
+        openReconocimiento();
+      }, 200);
+    }
+    function openMiniAmigo() {
+      document.getElementById('amigoOverlay').classList.add('active');
+      document.getElementById('amigoInput').value = '';
+      document.getElementById('amigoResponse').textContent = '';
+      document.getElementById('amigoResponse').classList.remove('visible');
+      document.getElementById('amigoFeedback').textContent = '';
+      document.getElementById('amigoFeedback').classList.remove('visible');
+    }
+    function closeMiniAmigo(e) {
+      if (!e || e.target.id === 'amigoOverlay' || e.target.classList.contains('ai-close')) {
+        document.getElementById('amigoOverlay').classList.remove('active');
+      }
+    }
+    function sendAmigo() {
+      track('amigo');
+      const input = document.getElementById('amigoInput');
+      const text = input.value.trim().replace(/\n/g, ' ');
+      const feedback = document.getElementById('amigoFeedback');
+      const response = document.getElementById('amigoResponse');
+      if (!text) {
+        feedback.textContent = 'Escribí algo para que tu Mini Amigo te ayude.';
+        feedback.classList.add('visible');
+        return;
+      }
+      feedback.textContent = '';
+      feedback.classList.remove('visible');
+      response.innerHTML = getAmigoResponse(text);
+      response.classList.add('visible');
+    }
+    function getAmigoResponse(text) {
+      const lower = text.toLowerCase();
+      const reunion = /reuni[óo]n|presentaci[óo]n|nervios|ansiedad|nerviosa|ansiosa|miedo|expongo|pitch|charla|oratoria|expongo|hablar en público|juntada/.test(lower);
+      const estres = /estr[ée]s|cansad[oa]|abrumad[oa]|agotad[oa]|saturad[oa]|agobiad[oa]|presión|presionad[oa]|mucho trabajo|no doy abasto|colapsad[oa]|burnout/.test(lower);
+      const concentracion = /concentrarme|foco|distracci[óo]n|distrad[oa]|memoria|atenci[óo]n|productividad|estudiar|aprender|leer/.test(lower);
+      const felicidad = /feliz|content[oa]|motivad[oa]|gratitud|alegre|buen día|gran día|celebrar|logro|metas|ganas/.test(lower);
+      const soledad = /solo|sola|aislamiento|desconectad[oa]|triste|bajón|melancol[íi]a|no me escuchan/.test(lower);
+
+      if (reunion) {
+        return '<b>¡Respira hondo! 🌬️</b><br>Para prepararte, anotá solo los <b>3 puntos clave</b> que querés transmitir y recordá que ya dominás el tema.<br><br>¿Querés hacer una pausa activa de 2 minutos para bajar la tensión?';
+      }
+      if (estres) {
+        return '<b>Cortá 5 minutitos. ⏸️</b><br>Estirá el cuello, girá los hombros y tomá un vaso de agua fresca. Tu mente necesita ese reseteo para seguir brillando.<br><br>En Company creemos que cuidarte es parte de rendir mejor.';
+      }
+      if (concentracion) {
+        return '<b>Activá el modo foco. 🎯</b><br>Cerrá pestañas que no uses, poné tu celular en silencio y trabajá en bloques de 25 minutos con 5 de descanso (técnica Pomodoro).<br><br>Una pausa corta renueva más que horas de esfuerzo forzado.';
+      }
+      if (felicidad) {
+        return '<b>¡Me encanta tu energía! 🌟</b><br>Aprovechá ese buen momento para compartirlo: mandá un mensaje de reconocimiento a un compañero o celebrá tu logro en el Muro de Posteos.<br><br>La buena onda se contagia.';
+      }
+      if (soledad) {
+        return '<b>No estás sola. 🤝</b><br>Conectá con un compañero, escribí en el Muro de Posteos o sumate a una comunidad de Viva Engage. En Company la escucha y el acompañamiento también son bienestar.<br><br>¿Querés que te sugiera una pausa para reconectar?';
+      }
+      return '<b>Gracias por compartir. 💚</b><br>En Company tu bienestar importa. Te propongo tres micro-acciones: hidratarte ahora, estirar los hombros y respirar profundo 3 veces.<br><br>¿Querés que te sugiera una pausa activa, un recordatorio de almuerzo o enviar un reconocimiento?';
+    }
+    function showDetail(type) {
+      const titles = {
+        muro: 'Muro de Posteos',
+        mensajes: 'Sección de Mensajes',
+        reconocimientos: 'Reconocimientos',
+        metricas: 'Métricas de Impacto'
+      };
+      alert('Explorando: ' + titles[type] + '\n\n(Esta es una simulación interactiva de la experiencia final.)');
+    }
+    function openMuro() {
+      document.getElementById('muroOverlay').classList.add('active');
+      document.getElementById('muroText').value = '';
+      document.getElementById('muroFeedback').textContent = '';
+      document.getElementById('muroFeedback').classList.remove('visible');
+    }
+    function closeMuro(e) {
+      if (!e || e.target.id === 'muroOverlay' || e.target.classList.contains('ai-close')) {
+        document.getElementById('muroOverlay').classList.remove('active');
+      }
+    }
+    function postMuro() {
+      const text = document.getElementById('muroText').value.trim();
+      const feedback = document.getElementById('muroFeedback');
+      if (!text) {
+        feedback.textContent = 'Escribe algo antes de postear.';
+        feedback.classList.add('visible');
+        return;
+      }
+      feedback.textContent = '¡Publicado con éxito!';
+      feedback.classList.add('visible');
+      addPost(text);
+      setTimeout(() => {
+        closeMuro();
+      }, 700);
+    }
+    let currentUser = { name: 'Sofía Pérez', initials: 'SP' };
+    let sessionMetrics = {
+      posts: 0,
+      recoOut: 0,
+      recoIn: 0,
+      amigo: 0,
+      actions: 0,
+      reactions: 0
+    };
+    function track(action) {
+      if (sessionMetrics[action] !== undefined) sessionMetrics[action]++;
+    }
+    function addPost(text) {
+      track('posts');
+      const container = document.getElementById('muroPosts');
+      const post = document.createElement('div');
+      post.className = 'muro-post';
+      post.innerHTML = `
+        <div class="muro-post-head">
+          <div class="muro-avatar">${currentUser.initials}</div>
+          <div>
+            <b>${escapeHtml(currentUser.name)}</b>
+            <span>ahora mismo</span>
+          </div>
+        </div>
+        <p>${escapeHtml(text)}</p>
+        <button class="muro-like" onclick="likePost(this)">❤️ Me gusta <span class="like-count">0</span></button>
+      `;
+      container.insertBefore(post, container.firstChild);
+    }
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    function likePost(btn) {
+      const countSpan = btn.querySelector('.like-count');
+      let count = parseInt(countSpan.textContent, 10);
+      if (btn.classList.contains('liked')) {
+        count--;
+        btn.classList.remove('liked');
+        track('reactions');
+      } else {
+        count++;
+        btn.classList.add('liked');
+        track('reactions');
+      }
+      countSpan.textContent = count;
+    }
+    function clapPost(btn) {
+      const countSpan = btn.querySelector('.clap-count');
+      let count = parseInt(countSpan.textContent, 10);
+      if (btn.classList.contains('clapped')) {
+        count--;
+        btn.classList.remove('clapped');
+        track('reactions');
+      } else {
+        count++;
+        btn.classList.add('clapped');
+        track('reactions');
+      }
+      countSpan.textContent = count;
+    }
+
+    // Reconocimiento
+    let selectedRecoValue = '';
+    function openReconocimiento() {
+      document.getElementById('recoOverlay').classList.add('active');
+      document.getElementById('recoTo').value = '';
+      document.getElementById('recoMsg').value = '';
+      document.getElementById('recoFeedback').textContent = '';
+      document.getElementById('recoFeedback').classList.remove('visible');
+      selectedRecoValue = '';
+      document.querySelectorAll('.reco-values button').forEach(b => b.classList.remove('selected'));
+    }
+    function closeReconocimiento(e) {
+      if (!e || e.target.id === 'recoOverlay' || e.target.classList.contains('ai-close')) {
+        document.getElementById('recoOverlay').classList.remove('active');
+      }
+    }
+    function selectValue(btn) {
+      selectedRecoValue = btn.dataset.value;
+      document.querySelectorAll('.reco-values button').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+    function sendReconocimiento() {
+      const to = document.getElementById('recoTo').value.trim();
+      const msg = document.getElementById('recoMsg').value.trim();
+      const feedback = document.getElementById('recoFeedback');
+      if (!to || !selectedRecoValue || !msg) {
+        feedback.textContent = 'Completá todos los campos antes de enviar.';
+        feedback.classList.add('visible');
+        return;
+      }
+      addRecoPost(to, selectedRecoValue, msg);
+      track('recoOut');
+      if (to.toLowerCase() === currentUser.name.toLowerCase()) {
+        track('recoIn');
+      }
+      feedback.textContent = '¡Reconocimiento enviado!';
+      feedback.classList.add('visible');
+      setTimeout(() => {
+        closeReconocimiento();
+      }, 700);
+    }
+    function addRecoPost(to, value, msg) {
+      const container = document.getElementById('muroPosts');
+      const post = document.createElement('div');
+      post.className = 'muro-post';
+      post.innerHTML = `
+        <div class="muro-post-head">
+          <div class="muro-avatar">${currentUser.initials}</div>
+          <div>
+            <b>${escapeHtml(currentUser.name)}</b>
+            <span>ahora mismo</span>
+          </div>
+        </div>
+        <div class="reco-badge">⭐ Reconocimiento · ${escapeHtml(value)}</div>
+        <p>Reconozco a <b>${escapeHtml(to)}</b> por su gran ejemplo de ${escapeHtml(value.replace('#',''))}: ${escapeHtml(msg)}</p>
+        <button class="muro-clap" onclick="clapPost(this)">👏 Aplaudir <span class="clap-count">5</span></button>
+      `;
+      container.insertBefore(post, container.firstChild);
+    }
+    function enterHub() {
+      const input = document.getElementById('onboardName');
+      const rawName = input.value.trim();
+      if (!rawName) return;
+      const firstName = rawName.split(' ')[0];
+      const initials = rawName.split(' ').map(n => n[0]).join('').toUpperCase();
+      currentUser = { name: rawName, initials };
+      document.getElementById('welcomeName').textContent = `Bienvenida, ${firstName}`;
+      document.getElementById('dashUserName').textContent = rawName;
+      document.getElementById('dashAvatar').textContent = initials;
+      document.getElementById('onboardOverlay').classList.add('hidden');
+      document.getElementById('simFrame').style.display = 'block';
+      const simBody = document.getElementById('simBody');
+      simBody.style.display = 'block';
+      simBody.classList.add('fade-in');
+    }
+
+    // Puntero del roadmap al hacer scroll
+    const road = document.getElementById('road');
+    const pointer = document.getElementById('roadPointer');
+
+    function updatePointer() {
+      const rect = road.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const roadHeight = rect.height;
+
+      const start = rect.top;
+      const end = rect.bottom - windowHeight;
+      const total = roadHeight - windowHeight;
+
+      let progress = 0;
+      if (start >= 0) {
+        progress = 0;
+      } else if (end <= 0) {
+        progress = 1;
+      } else {
+        progress = Math.abs(start) / total;
+      }
+
+      const topPos = Math.max(0, Math.min(100, progress * 100));
+      pointer.style.top = topPos + '%';
+    }
+
+    window.addEventListener('scroll', updatePointer);
+    window.addEventListener('resize', updatePointer);
+    updatePointer();
+  </script>
+</body>
+</html>
